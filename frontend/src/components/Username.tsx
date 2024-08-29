@@ -10,7 +10,7 @@ export const Username = () => {
 
   const formik = useFormik({
     initialValues: {
-      Username:''
+      username:''
     },
     validate:usernameValidate,
     validateOnBlur:false,
