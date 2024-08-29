@@ -9,7 +9,9 @@ interface Values {
 // Define the type for the error object
 interface Errors {
     username?: string;
-    password?: string
+    password?: string;
+    newPassword?: string;
+    confirmPassword?: string;
 }
 
 // validate username
@@ -48,3 +50,20 @@ function passwordVerify(error:Errors={}, values:Values):Errors{
     }
     return error;
 }
+
+// validate Reset Password
+
+interface ResetPassword {
+    newPassword: string;
+    confirmPassword: string;
+  }
+
+  export const resetPasswordValidation = async (values: ResetPassword): Promise<Errors> => {
+    const errors: Errors={};
+  
+    if (values.newPassword !== values.confirmPassword) {
+      errors.confirmPassword =  toast.error('Passwords do not match');
+    }
+  
+    return errors;
+  }
