@@ -73,7 +73,7 @@ interface ResetPassword {
 
 //   validate register form
 
-export const registerValidation = async (values:Values) =>{
+export const registerValidation = async (values:Values): Promise<Errors> =>{
     const errors = usernameVerify({},values);
     passwordVerify(errors, values);
     emailVerify(errors,values);
@@ -92,4 +92,10 @@ function emailVerify(error: Errors={},values:Values):Errors {
         error.email = toast.error("Invalid email")
     }
     return error;
+}
+
+/** validate profile page */
+export async function profileValidation(values:Values): Promise<Errors>{
+    const errors = emailVerify({}, values);
+    return errors;
 }
