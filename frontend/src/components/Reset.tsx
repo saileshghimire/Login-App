@@ -42,7 +42,7 @@ export const Reset = () => {
               <div className="textbox flex flex-col items-center gap-6">
                   <input {...formik.getFieldProps('newPassword')} className={styles.textbox} type="text" placeholder='New Password' />
                   <input {...formik.getFieldProps('confirmPassword')} className={styles.textbox} type="text" placeholder='Confirm Password' />
-                  <button className={styles.btn} type='submit'>Signin</button>
+                  <button className={styles.btn} type='submit'>Reset</button>
               </div>
 
              

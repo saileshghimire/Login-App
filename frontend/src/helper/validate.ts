@@ -4,6 +4,7 @@ import { toast } from "react-hot-toast";
 interface Values {
     username?: string;
     password?: string;
+    email?:string;
 }
 
 // Define the type for the error object
@@ -12,6 +13,7 @@ interface Errors {
     password?: string;
     newPassword?: string;
     confirmPassword?: string;
+    email?:string;
 }
 
 // validate username
@@ -67,3 +69,27 @@ interface ResetPassword {
   
     return errors;
   }
+
+
+//   validate register form
+
+export const registerValidation = async (values:Values) =>{
+    const errors = usernameVerify({},values);
+    passwordVerify(errors, values);
+    emailVerify(errors,values);
+    return errors;
+}
+
+function emailVerify(error: Errors={},values:Values):Errors {
+    const emailRegex:RegExp = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if(!values.email){
+        error.email = toast.error("Email Required");
+    }
+    else if(values.email.includes(" ")){
+        error.email = toast.error("Wrong email")
+    }
+    else if(!emailRegex.test(values.email)){
+        error.email = toast.error("Invalid email")
+    }
+    return error;
+}
