@@ -2,6 +2,8 @@ import express, { Request, Response} from 'express';
 import cors from 'cors';
 import morgan from 'morgan';
 import { PORT } from './secrets';
+import { connect } from 'http2';
+import router from './router';
 
 const app = express();
 
@@ -15,6 +17,8 @@ app.disable('x-powered-by');
 app.get('/', (req: Request,res: Response)=>{
     res.json("Hello ..")
 })
+
+app.use('/api', router);
 
 
 app.listen(PORT, () => {

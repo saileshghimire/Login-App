@@ -7,6 +7,7 @@ const express_1 = __importDefault(require("express"));
 const cors_1 = __importDefault(require("cors"));
 const morgan_1 = __importDefault(require("morgan"));
 const secrets_1 = require("./secrets");
+const router_1 = __importDefault(require("./router"));
 const app = (0, express_1.default)();
 app.use(express_1.default.json());
 app.use((0, cors_1.default)());
@@ -15,6 +16,7 @@ app.disable('x-powered-by');
 app.get('/', (req, res) => {
     res.json("Hello ..");
 });
+app.use('/api', router_1.default);
 app.listen(secrets_1.PORT, () => {
     console.log(`Server is running on port http://localhost:${secrets_1.PORT}`);
 });
