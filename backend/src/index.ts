@@ -2,8 +2,10 @@ import express, { Request, Response} from 'express';
 import cors from 'cors';
 import morgan from 'morgan';
 import { PORT } from './secrets';
-import { connect } from 'http2';
 import router from './router';
+import { PrismaClient } from '@prisma/client';
+import { errorMiddleware } from './middleware/error';
+
 
 const app = express();
 
@@ -12,14 +14,15 @@ app.use(cors());
 app.use(morgan('tiny'));
 app.disable('x-powered-by');
 
+app.use('/api', router);
 
+export const prisma = new PrismaClient();
 
 app.get('/', (req: Request,res: Response)=>{
     res.json("Hello ..")
 })
 
-app.use('/api', router);
-
+app.use(errorMiddleware);
 
 app.listen(PORT, () => {
       console.log(`Server is running on port http://localhost:${PORT}`);

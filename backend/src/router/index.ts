@@ -1,9 +1,10 @@
 import { Router, Request, Response } from "express";
+import userRouter from "./user";
 
 
 const rootrouter:Router = Router();
 
-rootrouter.use('/register');
+rootrouter.use('/user',userRouter);
 
 
 
