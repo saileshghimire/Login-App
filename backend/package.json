@@ -30,6 +30,7 @@
     "express": "^4.19.2",
     "jsonwebtoken": "^9.0.2",
     "morgan": "^1.10.0",
+    "otp-generator": "^4.0.1",
     "prisma": "^5.19.0",
     "zod": "^3.23.8"
   }

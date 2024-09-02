@@ -9,10 +9,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getUser = void 0;
+exports.updateUser = exports.getUser = void 0;
 const __1 = require("..");
 const not_found_1 = require("../exceptions/not-found");
 const root_1 = require("../exceptions/root");
+const users_1 = require("../validation/users");
+const bcryptjs_1 = require("bcryptjs");
 const getUser = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const username = req.params.username;
@@ -29,3 +31,29 @@ const getUser = (req, res, next) => __awaiter(void 0, void 0, void 0, function* 
     }
 });
 exports.getUser = getUser;
+const updateUser = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    const body = users_1.UpdateUserSchema.parse(req.body);
+    const data = {
+        username: body.username,
+        email: body.email,
+        firstName: body.firstName,
+        lastname: body.lastName,
+        mobile: body.mobile,
+        address: body.address,
+        profile: body.profile
+    };
+    if (body.password) {
+        data.password = (0, bcryptjs_1.hashSync)(body.password, 10);
+    }
+    const updatedUser = yield __1.prisma.user.update({
+        where: {
+            id: req.userId,
+        },
+        data: data,
+    });
+    return res.json({
+        message: "updated",
+        updatedUser
+    });
+});
+exports.updateUser = updateUser;

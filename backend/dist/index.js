@@ -11,10 +11,13 @@ const secrets_1 = require("./secrets");
 const router_1 = __importDefault(require("./router"));
 const client_1 = require("@prisma/client");
 const error_1 = require("./middleware/error");
+const cookie_parser_1 = __importDefault(require("cookie-parser"));
 const app = (0, express_1.default)();
+app.use((0, cookie_parser_1.default)());
 app.use(express_1.default.json());
 app.use((0, cors_1.default)({
-    credentials: true
+    credentials: true,
+    origin: "http://localhost:5173"
 }));
 app.use((0, morgan_1.default)('tiny'));
 app.disable('x-powered-by');

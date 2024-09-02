@@ -19,4 +19,5 @@ var ErrorCodes;
     ErrorCodes[ErrorCodes["INCORRECT_PASSWORD"] = 1004] = "INCORRECT_PASSWORD";
     ErrorCodes[ErrorCodes["Unprocessable_ENTITY"] = 2001] = "Unprocessable_ENTITY";
     ErrorCodes[ErrorCodes["INTERNAL_EXCEPTION"] = 3001] = "INTERNAL_EXCEPTION";
+    ErrorCodes[ErrorCodes["UNAUTHORIZED_ACCESS"] = 4001] = "UNAUTHORIZED_ACCESS";
 })(ErrorCodes || (exports.ErrorCodes = ErrorCodes = {}));

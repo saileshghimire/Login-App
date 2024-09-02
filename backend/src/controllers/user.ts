@@ -7,7 +7,6 @@ import { BadRequestsException } from "../exceptions/bad-request";
 import { ErrorCodes } from "../exceptions/root";
 import { InternalException } from "../exceptions/internal-exception";
 import { NotFoundException } from "../exceptions/not-found";
-import cookieParser from "cookie-parser";
 import jwt from "jsonwebtoken";
 import { JWT_SECRET } from "../secrets";
 
