@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.RegisterSchema = void 0;
+exports.LoginSchema = exports.RegisterSchema = void 0;
 const zod_1 = require("zod");
 exports.RegisterSchema = zod_1.z.object({
     username: zod_1.z.string(),
@@ -11,4 +11,8 @@ exports.RegisterSchema = zod_1.z.object({
     mobile: zod_1.z.string(),
     address: zod_1.z.string(),
     profile: zod_1.z.string()
+});
+exports.LoginSchema = zod_1.z.object({
+    username: zod_1.z.string(),
+    password: zod_1.z.string()
 });

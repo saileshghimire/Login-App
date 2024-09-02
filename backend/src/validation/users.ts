@@ -10,3 +10,8 @@ export const RegisterSchema = z.object({
     address:z.string(),
     profile:z.string()
 })
+
+export const LoginSchema = z.object({
+    username: z.string(),
+    password: z.string()
+})

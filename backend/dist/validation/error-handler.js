@@ -27,7 +27,8 @@ const errorHandler = (method) => {
             }
             else {
                 if (error instanceof zod_1.ZodError) {
-                    exception = new bad_request_1.BadRequestsException('Unprocessable entity', root_1.ErrorCodes.Unprocessable_ENTITY);
+                    // exception = new BadRequestsException(`${error.issues[0].message}`,ErrorCodes.Unprocessable_ENTITY)
+                    exception = new bad_request_1.BadRequestsException(`Unprocessable Entity`, root_1.ErrorCodes.Unprocessable_ENTITY);
                 }
                 else {
                     exception = new internal_exception_1.InternalException('Something went wrong!', error, root_1.ErrorCodes.INTERNAL_EXCEPTION);

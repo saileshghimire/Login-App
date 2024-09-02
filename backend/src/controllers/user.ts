@@ -1,11 +1,15 @@
 
 import { NextFunction, Request, Response } from "express";
 import { prisma } from "../index";
-import { RegisterSchema } from "../validation/users";
-import { hashSync } from "bcryptjs";
+import { LoginSchema, RegisterSchema } from "../validation/users";
+import { compareSync, hashSync } from "bcryptjs";
 import { BadRequestsException } from "../exceptions/bad-request";
 import { ErrorCodes } from "../exceptions/root";
 import { InternalException } from "../exceptions/internal-exception";
+import { NotFoundException } from "../exceptions/not-found";
+import cookieParser from "cookie-parser";
+import jwt from "jsonwebtoken";
+import { JWT_SECRET } from "../secrets";
 
 
 export const register = async (req:Request, res:Response, next:NextFunction) => {
@@ -44,3 +48,36 @@ export const register = async (req:Request, res:Response, next:NextFunction) => 
 };
 
 
+export const login = async(req:Request, res:Response,next:NextFunction) => {
+    const body = LoginSchema.parse(req.body);
+    let user = await prisma.user.findFirst({
+        where:{
+            username: body.username
+        },
+        select:{
+            id:true,
+            password:true
+        }
+    })
+    if(!user){
+        throw new NotFoundException('User Doesnot exist', ErrorCodes.USER_NOT_FOUND);
+    }
+    
+    if(!compareSync(body.password,user.password)){
+        throw new BadRequestsException('Incorrect password', ErrorCodes.INCORRECT_PASSWORD);
+    }
+
+    const token = jwt.sign({
+        userId: user.id
+    }, JWT_SECRET);
+    res.cookie("token",token).json({
+        message:"Logged in!"
+    });
+
+};
+
+export const logout = (req:Request, res:Response) => {
+    res.clearCookie("token").json({
+        message:"Logged out!"
+    });
+}

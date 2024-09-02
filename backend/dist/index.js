@@ -13,7 +13,9 @@ const client_1 = require("@prisma/client");
 const error_1 = require("./middleware/error");
 const app = (0, express_1.default)();
 app.use(express_1.default.json());
-app.use((0, cors_1.default)());
+app.use((0, cors_1.default)({
+    credentials: true
+}));
 app.use((0, morgan_1.default)('tiny'));
 app.disable('x-powered-by');
 app.use('/api', router_1.default);
