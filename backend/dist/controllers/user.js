@@ -63,10 +63,10 @@ const login = (req, res, next) => __awaiter(void 0, void 0, void 0, function* ()
         }
     });
     if (!user) {
-        throw new not_found_1.NotFoundException('User Doesnot exist', root_1.ErrorCodes.USER_NOT_FOUND);
+        return next(new not_found_1.NotFoundException('User Doesnot exist', root_1.ErrorCodes.USER_NOT_FOUND));
     }
     if (!(0, bcryptjs_1.compareSync)(body.password, user.password)) {
-        throw new bad_request_1.BadRequestsException('Incorrect password', root_1.ErrorCodes.INCORRECT_PASSWORD);
+        return next(new bad_request_1.BadRequestsException('Incorrect password', root_1.ErrorCodes.INCORRECT_PASSWORD));
     }
     const token = jsonwebtoken_1.default.sign({
         userId: user.id

@@ -21,4 +21,5 @@ export enum ErrorCodes {
     INCORRECT_PASSWORD = 1004,
     Unprocessable_ENTITY= 2001,
     INTERNAL_EXCEPTION=3001,
+    UNAUTHORIZED_ACCESS=4001,
 }

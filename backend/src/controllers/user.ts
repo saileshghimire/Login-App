@@ -60,11 +60,11 @@ export const login = async(req:Request, res:Response,next:NextFunction) => {
         }
     })
     if(!user){
-        throw new NotFoundException('User Doesnot exist', ErrorCodes.USER_NOT_FOUND);
+        return next(new NotFoundException('User Doesnot exist', ErrorCodes.USER_NOT_FOUND));
     }
     
     if(!compareSync(body.password,user.password)){
-        throw new BadRequestsException('Incorrect password', ErrorCodes.INCORRECT_PASSWORD);
+        return next(new BadRequestsException('Incorrect password', ErrorCodes.INCORRECT_PASSWORD));
     }
 
     const token = jwt.sign({
