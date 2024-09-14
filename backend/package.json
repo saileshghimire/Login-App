@@ -17,6 +17,7 @@
     "@types/cors": "^2.8.17",
     "@types/jsonwebtoken": "^9.0.6",
     "@types/node": "^22.5.1",
+    "@types/otp-generator": "^4.0.2",
     "typescript": "^5.5.4"
   },
   "dependencies": {

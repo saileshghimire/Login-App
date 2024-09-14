@@ -8,16 +8,12 @@ import { prisma } from "..";
 
 export const authMiddleware = async (req:Request, res:Response, next:NextFunction) => {
     // try {
-    console.log(`hi`);
-    
         const token = req.cookies.token;
-        console.log(`hi token..:${token}`);
         
         if(!token){
             next(new UnauthorizedException('Unauthorized.', ErrorCodes.UNAUTHORIZED_ACCESS));
         }
         const decoded = jwt.verify(token, JWT_SECRET) as JwtPayload;
-        console.log(`decoded:${decoded}`);
         
         const user = await prisma.user.findFirst({
             where:{
@@ -26,7 +22,6 @@ export const authMiddleware = async (req:Request, res:Response, next:NextFunctio
             if(user){
                 req.userId = user.id;
                 req.username = user.username;
-                console.log(req.username);
                 next();
                 
             }else{

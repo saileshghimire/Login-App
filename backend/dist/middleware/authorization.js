@@ -20,14 +20,11 @@ const secrets_1 = require("../secrets");
 const __1 = require("..");
 const authMiddleware = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     // try {
-    console.log(`hi`);
     const token = req.cookies.token;
-    console.log(`hi token..:${token}`);
     if (!token) {
         next(new unauthorized_1.UnauthorizedException('Unauthorized.', root_1.ErrorCodes.UNAUTHORIZED_ACCESS));
     }
     const decoded = jsonwebtoken_1.default.verify(token, secrets_1.JWT_SECRET);
-    console.log(`decoded:${decoded}`);
     const user = yield __1.prisma.user.findFirst({
         where: {
             id: decoded.userId
@@ -36,7 +33,6 @@ const authMiddleware = (req, res, next) => __awaiter(void 0, void 0, void 0, fun
     if (user) {
         req.userId = user.id;
         req.username = user.username;
-        console.log(req.username);
         next();
     }
     else {

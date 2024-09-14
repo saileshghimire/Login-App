@@ -2,7 +2,7 @@ import express, { Request, Response} from 'express';
 import cors from 'cors';
 import morgan from 'morgan';
 import { PORT } from './secrets';
-import router from './router';
+import rootrouter from './router';
 import { PrismaClient } from '@prisma/client';
 import { errorMiddleware } from './middleware/error';
 import cookieParser from "cookie-parser";
@@ -17,7 +17,7 @@ app.use(cors({
 }));
 app.use(morgan('tiny'));
 app.disable('x-powered-by');
-app.use('/api', router);
+app.use('/api', rootrouter);
 
 export const prisma = new PrismaClient();
 
