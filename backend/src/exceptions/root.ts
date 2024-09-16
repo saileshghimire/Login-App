@@ -22,4 +22,5 @@ export enum ErrorCodes {
     Unprocessable_ENTITY= 2001,
     INTERNAL_EXCEPTION=3001,
     UNAUTHORIZED_ACCESS=4001,
+    INVALID_OTP=5001,
 }

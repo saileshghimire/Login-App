@@ -25,3 +25,10 @@ model User {
   profile String
 
 }
+
+model Otp {
+  id        Int      @id @default(autoincrement())
+  email     String @unique
+  otp       String
+  expiresAt DateTime
+}
