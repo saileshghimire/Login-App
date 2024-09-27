@@ -147,3 +147,7 @@ export const logout = (req:Request, res:Response) => {
         message:"Logged out!"
     });
 }
+
+export const forgetPassword = async (req:Request, res:Response, next:NextFunction) =>{
+
+};
