@@ -1,4 +1,4 @@
-import { useState } from 'react'
+
 import './App.css'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 
@@ -9,6 +9,7 @@ import { Recovery } from "./components/Recovery";
 import { Profile } from "./components/Profile";
 import { Password } from "./components/Password";
 import { PageNotFound } from "./components/PageNotFound";
+import { OtpForm } from './components/OtpForm';
 
 
 
@@ -36,6 +37,10 @@ const router = createBrowserRouter([
   {
     path:'/reset',
     element: <Reset></Reset>
+  },
+  {
+    path:'/otp',
+    element: <OtpForm></OtpForm>
   },
   {
     path:'*',
