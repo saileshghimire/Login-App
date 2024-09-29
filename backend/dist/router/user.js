@@ -10,6 +10,6 @@ userRouter.post('/register', (0, error_handler_1.errorHandler)(user_1.register))
 userRouter.post('/login', (0, error_handler_1.errorHandler)(user_1.login));
 userRouter.post('/logout', (0, error_handler_1.errorHandler)(user_1.logout));
 userRouter.get('/:username', (0, error_handler_1.errorHandler)(getuser_1.getUser));
-userRouter.get('/verifyOTP', (0, error_handler_1.errorHandler)(user_1.verifyOTP));
+userRouter.post('/verifyOTP', (0, error_handler_1.errorHandler)(user_1.verifyOTP));
 userRouter.put('/update', [authorization_1.authMiddleware], (0, error_handler_1.errorHandler)(getuser_1.updateUser));
 exports.default = userRouter;

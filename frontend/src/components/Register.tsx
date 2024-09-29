@@ -27,7 +27,7 @@ export const Register = () => {
       try {
         const response = await sendOTP(values);
         if(response.status == 200){
-          navigate("/otp",{state:{email:values.email}})
+          navigate("/otp",{state:{email:values.email,username:values.username,password:values.password}})
         }
       } catch (error) {
         toast.error("Something went wrong")

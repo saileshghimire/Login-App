@@ -4,11 +4,11 @@ export const RegisterSchema = z.object({
     username: z.string(),
     password: z.string(),
     email: z.string().email(),
-    firstName: z.string(),
-    lastName: z.string(),
-    mobile: z.string(),
-    address:z.string(),
-    profile:z.string()
+    firstName: z.string().optional(),
+    lastName: z.string().optional(),
+    mobile: z.string().optional(),
+    address:z.string().optional(),
+    profile:z.string().optional()
 })
 
 export const LoginSchema = z.object({
@@ -25,4 +25,11 @@ export const UpdateUserSchema = z.object({
     mobile: z.string().optional(),
     address:z.string().optional(),
     profile:z.string().optional()
+})
+
+export const VerifyOtpSchema = z.object({
+    email: z.string().email(),
+    otp: z.string(),
+    username: z.string(),
+    password: z.string()
 })

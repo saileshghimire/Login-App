@@ -8,12 +8,12 @@ import { Otp } from "../container/Otp";
 export const OtpForm = () =>{
     const navigate = useNavigate();
     const location = useLocation();
-    const { email } = location.state ||"";
+    const { email,username,password } = location.state ||{};
     const [otp, setOtp] = useState<string>("");
 
         const handleSubmit = async (e: React.FormEvent) => {
             e.preventDefault();
-            const response = await axios.post("/api/verify-otp",{otp,email});
+            const response = await axios.post("http://localhost:3000/api/user/verifyOTP",{otp,email,username,password});
             if(response.status === 200){
                 navigate("/");
             }else{

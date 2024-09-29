@@ -8,22 +8,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __rest = (this && this.__rest) || function (s, e) {
-    var t = {};
-    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
-        t[p] = s[p];
-    if (s != null && typeof Object.getOwnPropertySymbols === "function")
-        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
-            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
-                t[p[i]] = s[p[i]];
-        }
-    return t;
-};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.logout = exports.login = exports.verifyOTP = exports.register = void 0;
+exports.forgetPassword = exports.logout = exports.login = exports.verifyOTP = exports.register = void 0;
 const index_1 = require("../index");
 const users_1 = require("../validation/users");
 const bcryptjs_1 = require("bcryptjs");
@@ -36,6 +25,9 @@ const nodemailer_1 = __importDefault(require("nodemailer"));
 const crypto_1 = __importDefault(require("crypto"));
 const transporter = nodemailer_1.default.createTransport({
     service: 'gmail',
+    host: "smtp.gmail.com",
+    port: 587,
+    secure: false,
     auth: {
         user: secrets_1.EMAIL_USER,
         pass: secrets_1.EMAIL_PASS
@@ -87,11 +79,11 @@ const register = (req, res, next) => __awaiter(void 0, void 0, void 0, function*
 });
 exports.register = register;
 const verifyOTP = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    const _a = req.body, { otp } = _a, userData = __rest(_a, ["otp"]);
+    const body = users_1.VerifyOtpSchema.parse(req.body);
     const storedOtp = yield index_1.prisma.otp.findFirst({
         where: {
-            email: userData.email,
-            otp: otp,
+            email: body.email,
+            otp: body.otp,
             expiresAt: {
                 gte: new Date()
             }
@@ -103,19 +95,14 @@ const verifyOTP = (req, res, next) => __awaiter(void 0, void 0, void 0, function
     else {
         const user = yield index_1.prisma.user.create({
             data: {
-                username: userData.username,
-                password: (0, bcryptjs_1.hashSync)(userData.password, 10),
-                email: userData.email,
-                firstName: userData.firstName,
-                lastname: userData.lastName,
-                mobile: userData.mobile,
-                address: userData.address,
-                profile: userData.profile
+                username: body.username,
+                password: (0, bcryptjs_1.hashSync)(body.password, 10),
+                email: body.email
             }
         });
         yield index_1.prisma.otp.delete({
             where: {
-                email: userData.email
+                email: body.email
             }
         });
         return res.status(201).json({ message: "Account created successfully", user });
@@ -153,3 +140,6 @@ const logout = (req, res) => {
     });
 };
 exports.logout = logout;
+const forgetPassword = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+});
+exports.forgetPassword = forgetPassword;

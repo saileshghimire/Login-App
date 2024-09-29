@@ -18,11 +18,11 @@ model User {
   username String @unique
   password  String
   email String @unique
-  firstName String
-  lastname String
-  mobile String
-  address String
-  profile String
+  firstName String? 
+  lastname String?
+  mobile String?
+  address String?
+  profile String?
 
 }
 

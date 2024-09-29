@@ -1,7 +1,7 @@
 
 import { NextFunction, Request, Response } from "express";
 import { prisma } from "../index";
-import { LoginSchema, RegisterSchema } from "../validation/users";
+import { LoginSchema, RegisterSchema, VerifyOtpSchema } from "../validation/users";
 import { compareSync, hashSync } from "bcryptjs";
 import { BadRequestsException } from "../exceptions/bad-request";
 import { ErrorCodes } from "../exceptions/root";
@@ -13,12 +13,13 @@ import nodemailer from "nodemailer";
 import crypto from "crypto";
 
 const transporter = nodemailer.createTransport({
-    host:"smtp.ethereal.email",
-    port:587,
-    secure:false,
+    service:'gmail',
+    host: "smtp.gmail.com",
+    port: 587,
+    secure: false,
     auth:{
         user:EMAIL_USER,
-        pass: EMAIL_PASS
+        pass:EMAIL_PASS
     }
 });
 
@@ -78,12 +79,12 @@ export const register = async (req:Request, res:Response, next:NextFunction) => 
 };
 
 export const verifyOTP = async (req: Request, res:Response, next:NextFunction) => {
-    const { otp, ...userData} = req.body;
+    const body = VerifyOtpSchema.parse(req.body);
 
     const storedOtp = await prisma.otp.findFirst({
         where:{
-            email: userData.email,
-            otp: otp,
+            email: body.email,
+            otp: body.otp,
             expiresAt:{
                 gte: new Date()
             }
@@ -94,20 +95,15 @@ export const verifyOTP = async (req: Request, res:Response, next:NextFunction) =
     } else {
         const user = await prisma.user.create({
             data: {
-              username: userData.username,
-              password: hashSync(userData.password, 10),
-              email: userData.email,
-              firstName: userData.firstName,
-              lastname: userData.lastName,
-              mobile: userData.mobile,
-              address: userData.address,
-              profile: userData.profile
+              username: body.username,
+              password: hashSync(body.password, 10),
+              email: body.email
             }
           });
 
         await prisma.otp.delete({
             where:{
-                email:userData.email
+                email:body.email
             }
         })
 

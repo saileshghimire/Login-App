@@ -11,7 +11,7 @@ userRouter.post('/register',errorHandler(register));
 userRouter.post('/login',errorHandler(login));
 userRouter.post('/logout',errorHandler(logout));
 userRouter.get('/:username',errorHandler(getUser));
-userRouter.get('/verifyOTP',errorHandler(verifyOTP));
+userRouter.post('/verifyOTP',errorHandler(verifyOTP));
 userRouter.put('/update',[authMiddleware],errorHandler(updateUser));
 
 export default userRouter;
