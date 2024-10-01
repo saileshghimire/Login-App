@@ -1,12 +1,16 @@
 
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import avatar from "../assets/profile.png";
 import styles from "../styles/Username.module.css";
-import { Toaster } from "react-hot-toast";
+import toast, { Toaster } from "react-hot-toast";
 import { useFormik } from "formik";
 import { passwordValidate } from "../helper/validate";
+import { sendlogin } from "../helper/helper";
 
 export const Password = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { username } = location.state;
 
   const formik = useFormik({
     initialValues: {
@@ -16,7 +20,18 @@ export const Password = () => {
     validateOnBlur:false,
     validateOnChange:false,
     onSubmit: async values => {
-      console.log(values);
+      values = Object.assign(values,{username})
+      try {
+        const response = await sendlogin(values);
+        if(response.status == 200){
+          navigate('/message')
+        }else{
+          toast.error(response.data.message)
+        }
+      } catch (error) {
+        console.log(error);
+        
+      }
       
     }
   });

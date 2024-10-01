@@ -10,6 +10,9 @@ import { Profile } from "./components/Profile";
 import { Password } from "./components/Password";
 import { PageNotFound } from "./components/PageNotFound";
 import { OtpForm } from './components/OtpForm';
+import { Message } from './components/Message';
+import { NotAuthorized } from './components/NotAuthorized';
+import { AuthorizedUser } from './middleware/auth';
 
 
 
@@ -17,6 +20,10 @@ const router = createBrowserRouter([
   {
     path:'/',
     element: <Username></Username>
+  },
+  {
+    path:'/notauthorized',
+    element: <NotAuthorized></NotAuthorized>
   },
   {
     path:'/register',
@@ -41,6 +48,10 @@ const router = createBrowserRouter([
   {
     path:'/otp',
     element: <OtpForm></OtpForm>
+  },
+  {
+    path:'/message',
+    element: <AuthorizedUser><Message></Message></AuthorizedUser> 
   },
   {
     path:'*',
