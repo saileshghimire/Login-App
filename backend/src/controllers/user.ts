@@ -51,28 +51,15 @@ export const register = async (req:Request, res:Response, next:NextFunction) => 
                 }
             });
 
-            await transporter.sendMail({
-                from: EMAIL_USER,
-                to: body.email,
-                subject:"Your OTP Code",
-                text: `Your OTP code is: ${otp}. It is valid for 1 minutes.`
-            });
+            // await transporter.sendMail({
+            //     from: EMAIL_USER,
+            //     to: body.email,
+            //     subject:"Your OTP Code",
+            //     text: `Your OTP code is: ${otp}. It is valid for 1 minutes.`
+            // });
 
             return res.status(200).json({ message: "OTP has been sent to your email." });
-
-            // const user = await prisma.user.create({
-            //     data:{
-            //         username:body.username,
-            //         password: hashSync(body.password,10),
-            //         email: body.email,
-            //         firstName: body.firstName,
-            //         lastname:body.lastName,
-            //         mobile: body.mobile,
-            //         address: body.address,
-            //         profile: body.profile
-            //     }
-            // })
-            // return res.status(200).json(user);      
+     
 
         }
 
@@ -107,7 +94,7 @@ export const verifyOTP = async (req: Request, res:Response, next:NextFunction) =
             }
         })
 
-        return res.status(201).json({ message: "Account created successfully", user });
+        return res.status(200).json({ message: "Account created successfully", user });
     }
 
 };
