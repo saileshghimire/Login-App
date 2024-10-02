@@ -11,6 +11,7 @@ import jwt from "jsonwebtoken";
 import { EMAIL_PASS,EMAIL_USER, JWT_SECRET } from "../secrets";
 import nodemailer from "nodemailer";
 import crypto from "crypto";
+import { deleteOTP, generateOTP, verifyotpFunction } from "./otpgenerate";
 
 const transporter = nodemailer.createTransport({
     service:'gmail',
@@ -41,22 +42,17 @@ export const register = async (req:Request, res:Response, next:NextFunction) => 
         }
 
         else{
-
-            const otp = crypto.randomInt(100000,999999).toString();
-            await prisma.otp.create({
-                data:{
-                    email: body.email,
-                    otp: otp,
-                    expiresAt: new Date(Date.now() +1 *60*1000)
-                }
-            });
-
-            // await transporter.sendMail({
-            //     from: EMAIL_USER,
-            //     to: body.email,
-            //     subject:"Your OTP Code",
-            //     text: `Your OTP code is: ${otp}. It is valid for 1 minutes.`
+            
+            const otp = await generateOTP(body.email);
+            // const otp = crypto.randomInt(100000,999999).toString();
+            // await prisma.otp.create({
+            //     data:{
+            //         email: body.email,
+            //         otp: otp,
+            //         expiresAt: new Date(Date.now() +1 *60*1000)
+            //     }
             // });
+
 
             return res.status(200).json({ message: "OTP has been sent to your email." });
      
@@ -68,15 +64,17 @@ export const register = async (req:Request, res:Response, next:NextFunction) => 
 export const verifyOTP = async (req: Request, res:Response, next:NextFunction) => {
     const body = VerifyOtpSchema.parse(req.body);
 
-    const storedOtp = await prisma.otp.findFirst({
-        where:{
-            email: body.email,
-            otp: body.otp,
-            expiresAt:{
-                gte: new Date()
-            }
-        }
-    });
+    const storedOtp = await verifyotpFunction(body.email,body.otp)
+
+    // const storedOtp = await prisma.otp.findFirst({
+    //     where:{
+    //         email: body.email,
+    //         otp: body.otp,
+    //         expiresAt:{
+    //             gte: new Date()
+    //         }
+    //     }
+    // });
     if (!storedOtp) {
         return next(new BadRequestsException("Invalid or expired OTP", ErrorCodes.INVALID_OTP));
     } else {
@@ -88,11 +86,12 @@ export const verifyOTP = async (req: Request, res:Response, next:NextFunction) =
             }
           });
 
-        await prisma.otp.delete({
-            where:{
-                email:body.email
-            }
-        })
+          await deleteOTP(body.email);
+        // await prisma.otp.delete({
+        //     where:{
+        //         email:body.email
+        //     }
+        // })
 
         return res.status(200).json({ message: "Account created successfully", user });
     }
@@ -117,6 +116,7 @@ export const login = async(req:Request, res:Response,next:NextFunction) => {
     if(!compareSync(body.password,user.password)){
         return next(new BadRequestsException('Incorrect password', ErrorCodes.INCORRECT_PASSWORD));
     }
+
 
     const token = jwt.sign({
         userId: user.id

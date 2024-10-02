@@ -51,7 +51,8 @@ const router = createBrowserRouter([
   },
   {
     path:'/message',
-    element: <AuthorizedUser><Message></Message></AuthorizedUser> 
+    element: <Message></Message>
+    // element: <AuthorizedUser><Message></Message></AuthorizedUser> 
   },
   {
     path:'*',
