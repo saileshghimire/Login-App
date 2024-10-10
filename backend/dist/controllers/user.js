@@ -113,7 +113,10 @@ const login = (req, res, next) => __awaiter(void 0, void 0, void 0, function* ()
     const token = jsonwebtoken_1.default.sign({
         userId: user.id
     }, secrets_1.JWT_SECRET);
-    res.cookie("token", token).json({
+    res.cookie("token", token, {
+        httpOnly: true,
+        sameSite: 'strict'
+    }).json({
         message: "Logged in!"
     });
 });

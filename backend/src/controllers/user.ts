@@ -121,7 +121,10 @@ export const login = async(req:Request, res:Response,next:NextFunction) => {
     const token = jwt.sign({
         userId: user.id
     }, JWT_SECRET);
-    res.cookie("token",token).json({
+    res.cookie("token",token,{
+        httpOnly: true,
+        sameSite:'strict'
+    }).json({
         message:"Logged in!"
     });
 
