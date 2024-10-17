@@ -122,7 +122,7 @@ export const login = async(req:Request, res:Response,next:NextFunction) => {
         userId: user.id
     }, JWT_SECRET);
     res.cookie("token",token,{
-        httpOnly: true,
+        // httpOnly: true,
         sameSite:'strict'
     }).json({
         message:"Logged in!"

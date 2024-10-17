@@ -9,5 +9,5 @@ export const verifyOTP = async (data:any) =>{
 }
 
 export const sendlogin = async (data:any) =>{
-    return await axios.post("http://localhost:3000/api/user/login",data)
+    return await axios.post("http://localhost:3000/api/user/login",data,{withCredentials:true})
 }
