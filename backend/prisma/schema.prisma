@@ -23,6 +23,9 @@ model User {
   mobile String?
   address String?
   profile String?
+  friends Friendship[]
+  sendermessages Messages[] @relation("sendermessages")
+  receivedmessages Messages[] @relation("receivedmessages")
 
 }
 
@@ -31,4 +34,26 @@ model Otp {
   email     String @unique
   otp       String
   expiresAt DateTime
+}
+
+model Friendship {
+  id Int @id @default(autoincrement())
+  friendId Int
+  userId Int
+  // friend User   @relation(fields: [friendId], references: [id])
+  user User @relation(fields: [userId],references: [id])
+  
+}
+
+model Messages{
+  id Int  @id @default(autoincrement())
+  content String
+  receiverId Int 
+  senderId Int
+  timestamp DateTime @default(now())
+  topic String
+  
+  sender   User @relation("sendermessages",fields: [senderId], references: [id])
+  receiver User @relation("receivedmessages",fields: [receiverId], references: [id])
+
 }
