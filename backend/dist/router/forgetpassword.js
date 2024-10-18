@@ -1,0 +1,10 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const error_handler_1 = require("../validation/error-handler");
+const forgetpassword_1 = require("../controllers/user/forgetpassword");
+const forgetPasswordRoute = (0, express_1.Router)();
+forgetPasswordRoute.post('/forgetPassword', (0, error_handler_1.errorHandler)(forgetpassword_1.forgetPassword));
+forgetPasswordRoute.post('/verifyingOtpforget', (0, error_handler_1.errorHandler)(forgetpassword_1.verifyingOtpforget));
+forgetPasswordRoute.post('/changePassword', (0, error_handler_1.errorHandler)(forgetpassword_1.changePassword));
+exports.default = forgetPasswordRoute;

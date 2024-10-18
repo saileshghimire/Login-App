@@ -13,6 +13,7 @@ import { OtpForm } from './components/OtpForm';
 import { Message } from './components/Message';
 import { NotAuthorized } from './components/NotAuthorized';
 import { AuthorizedUser } from './middleware/auth';
+import { ForgetPassword } from './components/ForgetPassword';
 
 
 
@@ -53,6 +54,11 @@ const router = createBrowserRouter([
     path:'/message',
     // element: <Message></Message>
     element: <AuthorizedUser><Message></Message></AuthorizedUser> 
+  },
+  {
+    path:'/forgetpassword',
+    element: <ForgetPassword></ForgetPassword>
+    // element: <AuthorizedUser><ForgetPassword></ForgetPassword></AuthorizedUser> 
   },
   {
     path:'*',

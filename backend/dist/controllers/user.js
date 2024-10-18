@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.forgetPassword = exports.logout = exports.login = exports.verifyOTP = exports.register = void 0;
+exports.logout = exports.login = exports.verifyOTP = exports.register = void 0;
 const index_1 = require("../index");
 const users_1 = require("../validation/users");
 const bcryptjs_1 = require("bcryptjs");
@@ -21,18 +21,7 @@ const root_1 = require("../exceptions/root");
 const not_found_1 = require("../exceptions/not-found");
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const secrets_1 = require("../secrets");
-const nodemailer_1 = __importDefault(require("nodemailer"));
 const otpgenerate_1 = require("./otpgenerate");
-const transporter = nodemailer_1.default.createTransport({
-    service: 'gmail',
-    host: "smtp.gmail.com",
-    port: 587,
-    secure: false,
-    auth: {
-        user: secrets_1.EMAIL_USER,
-        pass: secrets_1.EMAIL_PASS
-    }
-});
 const register = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const body = users_1.RegisterSchema.parse(req.body);
     let existingUser = yield index_1.prisma.user.findFirst({
@@ -48,14 +37,7 @@ const register = (req, res, next) => __awaiter(void 0, void 0, void 0, function*
     }
     else {
         const otp = yield (0, otpgenerate_1.generateOTP)(body.email);
-        // const otp = crypto.randomInt(100000,999999).toString();
-        // await prisma.otp.create({
-        //     data:{
-        //         email: body.email,
-        //         otp: otp,
-        //         expiresAt: new Date(Date.now() +1 *60*1000)
-        //     }
-        // });
+        yield (0, otpgenerate_1.sendOTP)(body.email, otp);
         return res.status(200).json({ message: "OTP has been sent to your email." });
     }
 });
@@ -63,15 +45,6 @@ exports.register = register;
 const verifyOTP = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const body = users_1.VerifyOtpSchema.parse(req.body);
     const storedOtp = yield (0, otpgenerate_1.verifyotpFunction)(body.email, body.otp);
-    // const storedOtp = await prisma.otp.findFirst({
-    //     where:{
-    //         email: body.email,
-    //         otp: body.otp,
-    //         expiresAt:{
-    //             gte: new Date()
-    //         }
-    //     }
-    // });
     if (!storedOtp) {
         return next(new bad_request_1.BadRequestsException("Invalid or expired OTP", root_1.ErrorCodes.INVALID_OTP));
     }
@@ -84,11 +57,6 @@ const verifyOTP = (req, res, next) => __awaiter(void 0, void 0, void 0, function
             }
         });
         yield (0, otpgenerate_1.deleteOTP)(body.email);
-        // await prisma.otp.delete({
-        //     where:{
-        //         email:body.email
-        //     }
-        // })
         return res.status(200).json({ message: "Account created successfully", user });
     }
 });
@@ -127,6 +95,3 @@ const logout = (req, res) => {
     });
 };
 exports.logout = logout;
-const forgetPassword = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-});
-exports.forgetPassword = forgetPassword;

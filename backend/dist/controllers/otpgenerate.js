@@ -36,15 +36,15 @@ const generateOTP = (email) => __awaiter(void 0, void 0, void 0, function* () {
 exports.generateOTP = generateOTP;
 const transporter = nodemailer_1.default.createTransport({
     service: 'gmail',
-    host: "smtp.gmail.com",
-    port: 587,
-    secure: false,
+    // host: "smtp.gmail.com",
+    // port: 587,
+    // secure: false,
     auth: {
         user: secrets_1.EMAIL_USER,
         pass: secrets_1.EMAIL_PASS
     }
 });
-const sendOTP = (email, otp, next) => __awaiter(void 0, void 0, void 0, function* () {
+const sendOTP = (email, otp) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         yield transporter.sendMail({
             from: secrets_1.EMAIL_USER,

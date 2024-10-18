@@ -5,13 +5,13 @@ interface Values {
     username?: string;
     password?: string;
     email?:string;
+    confrimPassword?:string;
 }
 
 // Define the type for the error object
 interface Errors {
     username?: string;
     password?: string;
-    newPassword?: string;
     confirmPassword?: string;
     email?:string;
 }

@@ -21,4 +21,5 @@ var ErrorCodes;
     ErrorCodes[ErrorCodes["INTERNAL_EXCEPTION"] = 3001] = "INTERNAL_EXCEPTION";
     ErrorCodes[ErrorCodes["UNAUTHORIZED_ACCESS"] = 4001] = "UNAUTHORIZED_ACCESS";
     ErrorCodes[ErrorCodes["INVALID_OTP"] = 5001] = "INVALID_OTP";
+    ErrorCodes[ErrorCodes["PASSWORD_NOT_CREATED"] = 6001] = "PASSWORD_NOT_CREATED";
 })(ErrorCodes || (exports.ErrorCodes = ErrorCodes = {}));

@@ -22,6 +22,7 @@ export const authMiddleware = async (req:Request, res:Response, next:NextFunctio
             if(user){
                 req.userId = user.id;
                 req.username = user.username;
+                req.email = user.email;
                 next();
                 
             }else{

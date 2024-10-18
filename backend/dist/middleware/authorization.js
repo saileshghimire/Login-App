@@ -33,6 +33,7 @@ const authMiddleware = (req, res, next) => __awaiter(void 0, void 0, void 0, fun
     if (user) {
         req.userId = user.id;
         req.username = user.username;
+        req.email = user.email;
         next();
     }
     else {

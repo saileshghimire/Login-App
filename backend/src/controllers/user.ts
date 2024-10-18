@@ -11,18 +11,10 @@ import jwt from "jsonwebtoken";
 import { EMAIL_PASS,EMAIL_USER, JWT_SECRET } from "../secrets";
 import nodemailer from "nodemailer";
 import crypto from "crypto";
-import { deleteOTP, generateOTP, verifyotpFunction } from "./otpgenerate";
+import { deleteOTP, generateOTP, sendOTP, verifyotpFunction } from "./otpgenerate";
 
-const transporter = nodemailer.createTransport({
-    service:'gmail',
-    host: "smtp.gmail.com",
-    port: 587,
-    secure: false,
-    auth:{
-        user:EMAIL_USER,
-        pass:EMAIL_PASS
-    }
-});
+
+
 
 export const register = async (req:Request, res:Response, next:NextFunction) => {
         const body = RegisterSchema.parse(req.body);
@@ -43,17 +35,8 @@ export const register = async (req:Request, res:Response, next:NextFunction) => 
 
         else{
             
-            const otp = await generateOTP(body.email);
-            // const otp = crypto.randomInt(100000,999999).toString();
-            // await prisma.otp.create({
-            //     data:{
-            //         email: body.email,
-            //         otp: otp,
-            //         expiresAt: new Date(Date.now() +1 *60*1000)
-            //     }
-            // });
-
-
+            const otp:any = await generateOTP(body.email);
+            await sendOTP(body.email,otp)
             return res.status(200).json({ message: "OTP has been sent to your email." });
      
 
@@ -66,15 +49,6 @@ export const verifyOTP = async (req: Request, res:Response, next:NextFunction) =
 
     const storedOtp = await verifyotpFunction(body.email,body.otp)
 
-    // const storedOtp = await prisma.otp.findFirst({
-    //     where:{
-    //         email: body.email,
-    //         otp: body.otp,
-    //         expiresAt:{
-    //             gte: new Date()
-    //         }
-    //     }
-    // });
     if (!storedOtp) {
         return next(new BadRequestsException("Invalid or expired OTP", ErrorCodes.INVALID_OTP));
     } else {
@@ -87,11 +61,7 @@ export const verifyOTP = async (req: Request, res:Response, next:NextFunction) =
           });
 
           await deleteOTP(body.email);
-        // await prisma.otp.delete({
-        //     where:{
-        //         email:body.email
-        //     }
-        // })
+     
 
         return res.status(200).json({ message: "Account created successfully", user });
     }
@@ -136,6 +106,3 @@ export const logout = (req:Request, res:Response) => {
     });
 }
 
-export const forgetPassword = async (req:Request, res:Response, next:NextFunction) =>{
-
-};

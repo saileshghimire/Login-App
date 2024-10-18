@@ -1,20 +1,24 @@
 
-import { Link, useLocation, useNavigate } from "react-router-dom";
+
+import { useLocation, useNavigate } from "react-router-dom";
 import avatar from "../assets/profile.png";
 import styles from "../styles/Username.module.css";
 import toast, { Toaster } from "react-hot-toast";
 import { useFormik } from "formik";
 import { passwordValidate } from "../helper/validate";
-import { forgetPassword, sendlogin } from "../helper/helper";
+import { sendlogin } from "../helper/helper";
+import { useState } from "react";
 
-export const Password = () => {
+export const ForgetPassword = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { username } = location.state;
 
+
   const formik = useFormik({
     initialValues: {
-      password:''
+      password:'',
+      resetPasswordValidation:''
     },
     validate:passwordValidate,
     validateOnBlur:false,
@@ -22,9 +26,11 @@ export const Password = () => {
     onSubmit: async values => {
       values = Object.assign(values,{username})
       try {
+        console.log(values);
+        
         const response = await sendlogin(values);
         if(response.status == 200){
-          navigate('/message')
+          navigate('/')
         }else{
           toast.error(response.data.message)
         }
@@ -35,19 +41,6 @@ export const Password = () => {
       
     }
   });
-
-  const handleForgetPassword = async () => {
-    try {
-      const value = {username:username}
-      console.log("Username before sending to forgetPassword:", value.username); 
-      await forgetPassword(value);
-      console.log("Username before navigating:", value.username);   
-      navigate('/recovery', {state:{username:value.username}});
-    } catch (error) {
-      console.error(error);
-      toast.error("Something went wrong!");
-    }
-  };
 
     return (
         <div className="container mx-auto">
@@ -72,12 +65,10 @@ export const Password = () => {
 
               <div className="textbox flex flex-col items-center gap-6">
                   <input {...formik.getFieldProps('password')} className={styles.textbox} type="text" placeholder='Password' />
+                  <input {...formik.getFieldProps('confirmpassword')} className={styles.textbox} type="text" placeholder=' Confirm Password' />
                   <button className={styles.btn} type='submit'>Signin</button>
               </div>
-
-              <div className="text-center py-4">
-                <span className='text-gray-500'>Forget Password? <Link className='text-red-500' onClick={handleForgetPassword} to="/recovery">Recover Now</Link></span>
-              </div>
+              
 
           </form>
          

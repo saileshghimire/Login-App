@@ -1,11 +1,31 @@
 
+import { useLocation, useNavigate } from "react-router-dom";
 import styles from "../styles/Username.module.css";
-import { Toaster } from "react-hot-toast";
+import toast, { Toaster } from "react-hot-toast";
+import { useState } from "react";
+import { verifyingOtpforget } from "../helper/helper";
 
 
 export const Recovery = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const {username} = location.state;
+  const [ otp, setOtp ] = useState<string>("");
 
-
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    console.log(username);
+    
+    const value = { otp, username };
+    console.log(value);
+    
+    const response = await verifyingOtpforget(value);
+    if(response.status === 200){
+        navigate("/forgetpassword",{state:{username:value.username}});
+    }else{
+        toast.error(response.data.message || "Invalid or expired OTP")
+    }
+};
 
     return (
         <div className="container mx-auto">
@@ -23,9 +43,11 @@ export const Recovery = () => {
             </span>
           </div>
           
-          <form className='py-1' onSubmit={()=>{}} >
+          <form className='py-1' onSubmit={handleSubmit} >
               <div className="textbox flex flex-col items-center gap-6">
-                  <input className={styles.textbox} type="text" placeholder='OPT' />
+                  <input className={styles.textbox}
+                  value={otp}
+                  onChange={(e) => setOtp(e.target.value)}type="text" placeholder='OPT' />
                   <button className={styles.btn} type='submit'>Let's Go</button>
               </div>
 
