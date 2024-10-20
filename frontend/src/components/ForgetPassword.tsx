@@ -7,7 +7,6 @@ import toast, { Toaster } from "react-hot-toast";
 import { useFormik } from "formik";
 import { passwordValidate } from "../helper/validate";
 import { sendlogin } from "../helper/helper";
-import { useState } from "react";
 
 export const ForgetPassword = () => {
   const navigate = useNavigate();
